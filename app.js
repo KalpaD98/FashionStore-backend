@@ -1,22 +1,38 @@
 const express = require('express');
 const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
 
+const mongoose = require('mongoose')
 const debug = require('debug')('fs-backend:server');
 const http = require('http');
 
-const indexRouter = require('./routes/index');
+const authRouter = require('./routes/auth');
 
 const app = express();
 
-app.use(logger('dev'));
+mongoose.connect('mongodb://localhost:27017/fashionStoreDB', {useNewUrlParser: true, useUnifiedTopology: true }).then(r => {
+    console.log('successfully connected to mongoDB')
+})
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(express.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+//header setting middleware
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    );
+    res.setHeader(
+        "Access-Control-Allow-Methods",
+        "GET, POST, PATCH, PUT, DELETE, OPTIONS"
+    );
+    next();
+});
+
+//auth route
+app.use('/auth', authRouter);
 
 /**
  * Get port from environment and store in Express.
