@@ -1,5 +1,6 @@
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
+const errorHandler = require('../services/validationErrorHandler')
 
 
 exports.login = (req, res, next) => {
