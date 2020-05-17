@@ -9,7 +9,7 @@ const User = require('../models/user')
 router.post('/login', authController.login);
 
 
-router.post(
+router.put(
     '/signup',
     [
         body('email')
