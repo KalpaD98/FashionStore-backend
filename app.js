@@ -34,6 +34,16 @@ app.use((req, res, next) => {
 //auth route
 app.use('/auth', authRouter);
 
+//error handling middleware
+app.use((error, req, res, next) => {
+    console.log(error);
+    const status = error.statusCode || 500;
+    const message = error.message;
+    const data = error.data
+    res.status(status).json({message: message, data: data});
+});
+
+
 /**
  * Get port from environment and store in Express.
  */

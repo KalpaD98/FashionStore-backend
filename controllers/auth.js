@@ -4,6 +4,7 @@ const errorHandler = require('../services/validationErrorHandler')
 
 
 exports.login = (req, res, next) => {
+    errorHandler(req)
     const email = req.body.email;
     const password = req.body.password
 }
