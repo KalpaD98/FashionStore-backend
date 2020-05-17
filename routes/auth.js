@@ -25,7 +25,7 @@ router.post(
             }).normalizeEmail(),
         body('password')
             .trim()
-            .isLength({min: 5}),
+            .isLength({min: 6}),
         body('name')
             .trim()
             .isLength({min: 3}),

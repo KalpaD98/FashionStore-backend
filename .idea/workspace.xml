@@ -20,7 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b5ada2e7-3e39-47b4-92af-d7b0f2e75941" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/routes/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/auth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +83,8 @@
       <workItem from="1588359863094" duration="641000" />
       <workItem from="1588361408270" duration="1367000" />
       <workItem from="1589610720432" duration="5369000" />
-      <workItem from="1589695615025" duration="340000" />
+      <workItem from="1589695615025" duration="1140000" />
+      <workItem from="1589697129694" duration="15000" />
     </task>
     <servers />
   </component>
@@ -152,16 +153,5 @@
       <screen x="0" y="23" width="1440" height="788" />
     </state>
     <state x="506" y="334" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1440.788@0.23.1440.788" timestamp="1588361873241" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/controllers/auth.js</url>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
