@@ -1,6 +1,7 @@
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const errorHandler = require('../services/validationErrorHandler')
+const jwt = require('jsonwebtoken')
 
 
 exports.login = async (req, res, next) => {
@@ -16,13 +17,23 @@ exports.login = async (req, res, next) => {
             throw error
         }
 
-        const passwordMatched = await bcrypt.compare(password,user.password)
+        const passwordMatched = await bcrypt.compare(password, user.password)
 
-        if(!passwordMatched){
+        if (!passwordMatched) {
             const error = new Error('Invalid Password')
             error.statusCode = 401;
             throw error
         }
+
+        const token = jwt.sign({
+                email: user.email,
+                userId: user._id.toString()
+            },
+            process.env.SECRET,
+            {expiresIn: '1h'}
+        )
+
+        res.status(200).json({token: token, userId: user._id.toString()})
 
 
     } catch (e) {
