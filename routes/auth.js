@@ -6,7 +6,16 @@ const User = require('../models/user')
 
 
 /* GET home page. */
-router.post('/login', authController.login);
+router.post('/login', [
+    body('email')
+        .trim()
+        .isEmail()
+        .withMessage('Please enter a valid email')
+        .normalizeEmail(),
+    body('password')
+        .trim()
+        .isLength({min: 6}),
+], authController.login);
 
 
 router.put(
