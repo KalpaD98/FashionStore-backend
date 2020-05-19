@@ -3,10 +3,31 @@ const bcrypt = require('bcrypt')
 const errorHandler = require('../services/validationErrorHandler')
 
 
-exports.login = (req, res, next) => {
+exports.login = async (req, res, next) => {
+    errorHandler(req)
     const email = req.body.email;
     const password = req.body.password
 
+    try {
+        const user = await User.findOne({email: email})
+        if (!user) {
+            const error = new Error('A user with this email couldn\'t be found')
+            error.statusCode = 401;
+            throw error
+        }
+
+        const passwordMatched = await bcrypt.compare(password,user.password)
+
+        if(!passwordMatched){
+            const error = new Error('Invalid Password')
+            error.statusCode = 401;
+            throw error
+        }
+
+
+    } catch (e) {
+        next(e)
+    }
 
 
 }
@@ -33,6 +54,6 @@ exports.signup = (req, res, next) => {
                     });
                 })
         })
-        .catch(err => console.log(err))
+        .catch(err => next(err))
 
 }

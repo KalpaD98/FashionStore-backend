@@ -34,6 +34,7 @@ app.use((req, res, next) => {
 //auth route
 app.use('/auth', authRouter);
 
+
 //error handling middleware
 app.use((error, req, res, next) => {
     console.log(error);
