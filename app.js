@@ -4,7 +4,7 @@ const path = require('path');
 
 const mongoose = require('mongoose')
 const debug = require('debug')('fs-backend:server');
-//const http = require('http');
+
 
 const authRouter = require('./routes/auth');
 
@@ -55,6 +55,7 @@ app.set('port', port);
 //created http server
 //const server = http.createServer(app);
 
+// create server
 const server= app.listen(port,()=>{
     console.log("Listening to PORT : "+port);
 })
