@@ -118,5 +118,4 @@ dist
 #DS_store
 .DS_Store
 #webstorm file
-.idea/workspace.xml
-.idea/inspectionProfiles/
+.idea/
