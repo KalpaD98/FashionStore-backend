@@ -35,7 +35,7 @@ router.put(
         body('password')
             .trim()
             .isLength({min: 6}),
-        body('username')
+        body('name')
             .trim()
             .isLength({min: 3}),
     ],
