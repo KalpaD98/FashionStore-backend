@@ -3,13 +3,14 @@ const express = require('express');
 const path = require('path');
 
 
-const authRouter = require('./routes/auth');
+const authRouter = require('./routes/userRouter');
+const itemRouter = require('./routes/itemRouter');
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
 
 //header setting middleware
 app.use((req, res, next) => {
@@ -26,7 +27,8 @@ app.use((req, res, next) => {
 });
 
 //auth route
-app.use('/auth', authRouter);
+app.use('/api/dev/users', authRouter);
+app.use('/api/dev/items', itemRouter);
 
 
 //error handling middleware
