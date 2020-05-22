@@ -48,7 +48,7 @@ exports.signup = async (req, res, next) => {
     errorHandler(req)
     const email = req.body.email;
     const password = req.body.password
-    const name = req.body.name // needs to e added on front end
+    const username = req.body.username // needs to e added on front end
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10)
@@ -57,7 +57,7 @@ exports.signup = async (req, res, next) => {
         }
         const user = new User({
             email: email,
-            name: name,
+            username: username,
             password: hashedPassword
         });
 
