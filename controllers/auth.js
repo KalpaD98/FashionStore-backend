@@ -2,7 +2,6 @@ const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const errorHandler = require('../services/validationErrorHandler')
 const jwt = require('jsonwebtoken')
-const throwError = require('../services/throwError')
 
 
 exports.login = async (req, res, next) => {
@@ -34,7 +33,7 @@ exports.login = async (req, res, next) => {
             {expiresIn: '1h'}
         )
 
-        res.status(200).json({token: token, expiresIn: '3600', userId: user._id})
+        res.status(200).json({token: token, userId: user._id.toString()})
 
 
     } catch (e) {
@@ -44,33 +43,28 @@ exports.login = async (req, res, next) => {
 
 }
 
-exports.signup = async (req, res, next) => {
+exports.signup = (req, res, next) => {
     errorHandler(req)
     const email = req.body.email;
     const password = req.body.password
-    const username = req.body.username // needs to e added on front end
-
-    try {
-        const hashedPassword = await bcrypt.hash(password, 10)
-        if (!hashedPassword) {
-            throwError('Error hashing password', 500);
-        }
-        const user = new User({
-            email: email,
-            username: username,
-            password: hashedPassword
-        });
-
-        const createdUser = await user.save()
-
-        if (createdUser) {
-            res.status(201).json({message: "user created successfully", user: createdUser})
-        } else {
-            throwError('user signup failed', 409);
-        }
-
-    } catch (e) {
-        next(e)
-    }
+    const name = req.body.name // needs to e added on front end
+    bcrypt.hash(password, 10).then(
+        hashedPassword => {
+            const user = new User({
+                email: email,
+                name: name,
+                password: hashedPassword
+            });
+            user.save()
+                .then(result => {
+                    res.status(201).json({message: "user created successfully", user: result})
+                })
+                .catch(e => {
+                    res.status(500).json({
+                        message: 'Server Error : failed to hash password try again later\n\n' + e
+                    });
+                })
+        })
+        .catch(err => next(err))
 
 }
