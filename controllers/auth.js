@@ -52,6 +52,9 @@ exports.signup = async (req, res, next) => {
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10)
+        if (!hashedPassword) {
+            throwError('Error hashing password', 500);
+        }
         const user = new User({
             email: email,
             name: name,
