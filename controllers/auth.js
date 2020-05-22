@@ -1,4 +1,4 @@
-const User = require('../models/user')
+const User = require('../models/user-model')
 const bcrypt = require('bcrypt')
 const errorHandler = require('../services/validationErrorHandler')
 const jwt = require('jsonwebtoken')
