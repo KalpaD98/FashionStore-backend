@@ -3,13 +3,14 @@ const debug = require('debug')('fs-backend:server');
 const app = require('./app');
 
 // connection String
-const DB='mongodb://localhost:27017/fashionStoreDB'
+const DB=process.env.LOCAL_DB;
 
 // connection
 mongoose.connect(DB, 
     {
         useNewUrlParser: true,
-        useUnifiedTopology: true 
+        useUnifiedTopology: true,
+        useCreateIndex: true
     }).then(() => {
     console.log('successfully connected to mongoDB');
 });
