@@ -9,19 +9,14 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-<<<<<<< HEAD:models/user.js
     }
-    , username: {
-=======
-    },
-    name: {
->>>>>>> conflict_resolve:models/user-model.js
-        type: String,
-        required: true
+    ,
+    username: {
+        type: String
     },
     role: {
         type: String,
-        enum:['admin','store-manager','user'],
+        enum: ['admin', 'store-manager', 'user'],
         default: 'user'
     }
 })
