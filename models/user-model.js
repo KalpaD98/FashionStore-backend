@@ -9,10 +9,20 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+<<<<<<< HEAD:models/user.js
     }
     , username: {
+=======
+    },
+    name: {
+>>>>>>> conflict_resolve:models/user-model.js
         type: String,
         required: true
+    },
+    role: {
+        type: String,
+        enum:['admin','store-manager','user'],
+        default: 'user'
     }
 })
 
