@@ -1,9 +1,10 @@
 const express = require('express');
-const router = express.Router();
-const authController = require('../controllers/auth')
+const authController = require('../controllers/auth');
+const userController=require('../controllers/userController');
 const {body} = require('express-validator');
-const User = require('../models/user')
+const User = require('../models/user-model');
 
+const router = express.Router();
 
 /* GET home page. */
 router.post('/login', [
@@ -40,5 +41,16 @@ router.put(
             .isLength({min: 3}),
     ],
     authController.signup);
+
+router
+    .route('/')
+        .get(userController.getAllUsers)
+        .post(userController.createUser)
+
+router
+    .route('/:id')
+        .get(userController.getUser)
+        .patch(userController.updateUser)
+        .delete(userController.deleteUser)
 
 module.exports = router;
