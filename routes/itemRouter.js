@@ -1,17 +1,20 @@
-const express=require('express');
-const itemController=require('../controllers/itemController');
+const express = require('express');
+const itemController = require('../controllers/itemController');
+const isAuth = require("../middleware/is-auth");
 
-const router=express.Router();
+const extractFile = require("../middleware/file");
+
+const router = express.Router();
 
 router
     .route('/')
-        .get(itemController.getAllItems)
-        .post(itemController.createItem)
+    .get(itemController.getAllItems)
+    .post(isAuth, extractFile, itemController.createItem)
 
 router
     .route('/:id')
-        .get(itemController.getItem)
-        .patch(itemController.updateItem)
-        .delete(itemController.deleteItem)
+    .get(itemController.getItem)
+    .put(isAuth, extractFile, itemController.updateItem)
+    .delete(isAuth, itemController.deleteItem)
 
-module.exports=router;
+module.exports = router;
