@@ -28,12 +28,10 @@ const itemSchema = new mongoose.Schema({
         type: String,
         default: "default-img.jpg"
     },
-    country: {
-        type: String
-    },
     itemQuantity: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
     averageRating: {
         type: Number,
