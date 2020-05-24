@@ -8,7 +8,7 @@ const itemSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        enum: ['Ladies', 'Gents', 'Unisex', 'Teenage-Boys', 'Teenage-Girls', 'Boys', 'Girls', 'Babies', 'Other'],
+        enum: ['Women', 'Men', 'Unisex', 'Kids', 'Sports', 'Babies', 'Other'],
         required: [true, 'An item must have a category']
     },
     itemType: {
