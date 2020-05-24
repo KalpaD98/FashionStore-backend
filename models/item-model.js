@@ -38,8 +38,8 @@ const itemSchema=new mongoose.Schema({
     },
     ratingAverage:{
         type: Number,
-        min: [0,'A rate cannot be lesserthan 0'],
-        max: [5,'A rate cannot be greaterthan 1'],
+        min: [0,'A rate cannot be lesser than 0'],
+        max: [5,'A rate cannot be greater than 5'],
         default: 4.0
     },
     ratingQuantity:{
