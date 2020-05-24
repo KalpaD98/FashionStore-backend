@@ -8,12 +8,11 @@ const itemSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        enum: ['Ladies', 'Gents', 'Unisex', 'Teenage-Boys', 'Teenage-Grls', 'Boys', 'Girls', 'Babies', 'Other'],
+        enum: ['Ladies', 'Gents', 'Unisex', 'Teenage-Boys', 'Teenage-Girls', 'Boys', 'Girls', 'Babies', 'Other'],
         required: [true, 'An item must have a category']
     },
     itemType: {
         type: String,
-        enum: ['Trouser', 'Shirt', 'T-shirt'],
         required: true
     },
     price: {
@@ -36,13 +35,13 @@ const itemSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    ratingAverage: {
+    averageRating: {
         type: Number,
         min: [0, 'A rate cannot be lesser than 0'],
         max: [5, 'A rate cannot be greater than 5'],
         default: 4.0
     },
-    ratingQuantity: {
+    numberOfRatings: {
         type: Number,
         default: 0
     },
