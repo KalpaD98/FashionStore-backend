@@ -39,7 +39,7 @@ const itemSchema = new mongoose.Schema({
         type: Number,
         min: [0, 'A rate cannot be lesser than 0'],
         max: [5, 'A rate cannot be greater than 5'],
-        default: 4.0
+        default: null
     },
     numberOfRatings: {
         type: Number,
