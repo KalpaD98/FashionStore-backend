@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const itemSchema = new mongoose.Schema({
 
-    itemName: {
+    title: {
         type: String,
         required: [true, 'An item must have a name']
     },
@@ -24,9 +24,9 @@ const itemSchema = new mongoose.Schema({
         type: String,
         required: [true, 'An item must have a description']
     },
-    photos: {
+    imagePath: {
         type: String,
-        default: "default-img.jpg"
+        required: true
     },
     quantity: {
         type: Number,

@@ -20,6 +20,10 @@ exports.getAllItems=async(req,res,next)=>{
 
 
 exports.createItem=async(req,res,next)=>{
+    const url = req.protocol + "://" + req.get('host');
+    const item = new Item(
+        title,category,type,price,description,photos
+    )
     try{
         const item= await Item.create(req.body);
         res.status(201).json({
@@ -28,7 +32,8 @@ exports.createItem=async(req,res,next)=>{
                 item
             }
         }) 
-    }catch(err){
+    }
+    catch(err){
         res.status(400).json({
             status:'fail',
             message: err.message
