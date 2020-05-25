@@ -1,6 +1,5 @@
 const Item = require('../models/item-model');
 const errorThrower = require('../commons/errorHandlers/throwError');
-const UserRole = require('../commons/enums/UserRoleEnum')
 
 
 exports.getAllItems = async (req, res, next) => {
@@ -23,12 +22,7 @@ exports.getAllItems = async (req, res, next) => {
 
 
 exports.createItem = async (req, res, next) => {
-    console.log(UserRole)
-    const userRole = req.userRole;
     try {
-        if (userRole === UserRole.User || userRole === null) {
-            errorThrower('unauthorized request', 401)
-        }
         const url = req.protocol + "://" + req.get('host');
         const item = new Item(
             {
@@ -43,8 +37,10 @@ exports.createItem = async (req, res, next) => {
             }
         );
 
-
         const savedItem = await item.save();
+        if (!savedItem) {
+            errorThrower('An Error occurred while saving the item please contact administration',500)
+        }
         res.status(201).json({
             message: 'successfully created item',
             savedItem

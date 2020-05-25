@@ -15,7 +15,6 @@ const authHandler = (req, res, next) => {
         if (!decodedToken) {
             throwError('Not authenticated', 401)
         }
-
         req.userId = decodedToken.userId
         req.userRole = decodedToken.userRole
         req.userEmail = decodedToken.userEmail
