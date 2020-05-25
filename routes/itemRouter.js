@@ -6,13 +6,11 @@ const extractFile = require("../middleware/file");
 
 const router = express.Router();
 
-router
-    .route('/')
+router.route('/')
     .get(itemController.getAllItems)
     .post(isAuth, extractFile, itemController.createItem)
 
-router
-    .route('/:id')
+router.route('/:id')
     .get(itemController.getItem)
     .put(isAuth, extractFile, itemController.updateItem)
     .delete(isAuth, itemController.deleteItem)
