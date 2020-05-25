@@ -1,6 +1,6 @@
 const express = require('express');
 const authController = require('../controllers/auth');
-const userController=require('../controllers/userController');
+const userController = require('../controllers/userController');
 const {body} = require('express-validator');
 const User = require('../models/user-model');
 
@@ -44,13 +44,13 @@ router.put(
 
 router
     .route('/')
-        .get(userController.getAllUsers)
-        .post(userController.createUser)
+    .get(userController.getAllUsers)
+    .post(userController.createUser)
 
 router
     .route('/:id')
-        .get(userController.getUser)
-        .patch(userController.updateUser)
-        .delete(userController.deleteUser)
+    .get(userController.getUser)
+    .put(userController.updateUser)
+    .delete(userController.deleteUser)
 
 module.exports = router;
