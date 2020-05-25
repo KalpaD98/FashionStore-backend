@@ -1,5 +1,5 @@
-const errorThrower = require('../commons/errorHandlers/throwError')
-const UserRole = require('../commons/enums/UserRoleEnum')
+const errorThrower = require('../../commons/errorHandlers/throwError')
+const UserRole = require('../../commons/enums/UserRoleEnum')
 
 const isHigherRole = (req, res, next) => {
     const role = req.userRole

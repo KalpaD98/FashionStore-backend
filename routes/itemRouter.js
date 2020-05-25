@@ -1,7 +1,7 @@
 const express = require('express');
 const itemController = require('../controllers/itemController');
 const isAuth = require("../middleware/is-auth");
-const isHigherRole = require('../middleware/is-higher-role')
+const isHigherRole = require('../middleware/role-validators/is-higher-role')
 
 const extractFile = require("../middleware/file");
 
