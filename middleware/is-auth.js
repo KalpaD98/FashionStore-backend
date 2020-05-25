@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const throwError = require('../errorHandlers/throwError')
+const throwError = require('../commons/errorHandlers/throwError')
 
 const authHandler = (req, res, next) => {
 

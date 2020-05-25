@@ -1,12 +1,7 @@
 const Item = require('../models/item-model');
-const errorThrower = require('../errorHandlers/throwError');
+const errorThrower = require('../commons/errorHandlers/throwError');
+const UserRole = require('../commons/enums/UserRoleEnum')
 
-const UserRole = {
-    SuperAdmin: 'super-admin',
-    Admin: 'admin',
-    StoreManager: 'store-manager',
-    User: 'user'
-}
 
 exports.getAllItems = async (req, res, next) => {
     try {

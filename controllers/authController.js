@@ -1,8 +1,8 @@
 const User = require('../models/user-model')
 const bcrypt = require('bcrypt')
-const errorHandler = require('../errorHandlers/validationErrorHandler')
+const errorHandler = require('../commons/errorHandlers/validationErrorHandler')
 const jwt = require('jsonwebtoken')
-const throwError = require('../errorHandlers/throwError')
+const throwError = require('../commons/errorHandlers/throwError')
 
 
 exports.login = async (req, res, next) => {
