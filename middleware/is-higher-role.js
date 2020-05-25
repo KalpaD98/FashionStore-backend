@@ -13,8 +13,6 @@ const isHigherRole = (req, res, next) => {
     } catch (e) {
         next(e)
     }
-
-
 }
 
 

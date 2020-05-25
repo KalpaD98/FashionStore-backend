@@ -1,7 +1,6 @@
 const Item = require('../models/item-model');
 const errorThrower = require('../commons/errorHandlers/throwError');
 
-
 exports.getAllItems = async (req, res, next) => {
     try {
         const items = await Item.find();
