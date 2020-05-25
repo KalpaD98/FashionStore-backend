@@ -1,8 +1,8 @@
 const User = require('../models/user-model')
 const bcrypt = require('bcrypt')
-const errorHandler = require('../services/validationErrorHandler')
+const errorHandler = require('../errorHandlers/validationErrorHandler')
 const jwt = require('jsonwebtoken')
-const throwError = require('../services/throwError')
+const throwError = require('../errorHandlers/throwError')
 
 
 exports.login = async (req, res, next) => {
@@ -27,14 +27,21 @@ exports.login = async (req, res, next) => {
         }
 
         const token = jwt.sign({
-                email: user.email,
-                userId: user._id.toString()
+                userId: user._id.toString(),
+                userRole: user.role,
+                userEmail: user.email
             },
             process.env.SECRET,
             {expiresIn: '1h'}
         )
 
-        res.status(200).json({token: token, expiresIn: '3600', userId: user._id})
+        res.status(200).json({
+            token: token,
+            expiresIn: '3600',
+            userId: user._id,
+            userRole: user.role,
+            userEmail: user.email
+        })
 
 
     } catch (e) {

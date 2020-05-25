@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const throwError = require('../services/throwError')
+const throwError = require('../errorHandlers/throwError')
 
 const authHandler = (req, res, next) => {
 
@@ -24,6 +24,8 @@ const authHandler = (req, res, next) => {
     }
 
     req.userId = decodedToken.userId
+    req.userRole = decodedToken.userRole
+    req.userEmail = decodedToken.userEmail
     next()
 }
 

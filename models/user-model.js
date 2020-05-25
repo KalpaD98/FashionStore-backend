@@ -16,10 +16,12 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['admin', 'store-manager', 'user'],
+        enum: ['super-admin', 'admin', 'store-manager', 'user'],
         default: 'user'
     }
 })
+
+
 
 
 userSchema.plugin(uniqueValidator)

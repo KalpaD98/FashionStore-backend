@@ -1,4 +1,12 @@
 const Item = require('../models/item-model');
+const errorThrower = require('../errorHandlers/throwError');
+
+const UserRole = {
+    SuperAdmin: 'super-admin',
+    Admin: 'admin',
+    StoreManager: 'store-manager',
+    User: 'user'
+}
 
 exports.getAllItems = async (req, res, next) => {
     try {
@@ -20,31 +28,34 @@ exports.getAllItems = async (req, res, next) => {
 
 
 exports.createItem = async (req, res, next) => {
-    const url = req.protocol + "://" + req.get('host');
-    const item = new Item(
-        {
-            title: req.body.title,
-            category: req.body.category,
-            type: req.body.type,
-            price: req.body.price,
-            description: req.body.description,
-            imagePath: url + "/public/images/" + req.file.filename,
-            quantity: req.body.quantity,
-            creator: req.userId,
-        }
-    );
-
+    console.log(UserRole)
+    const userRole = req.userRole;
     try {
+        if (userRole === UserRole.User || userRole === null) {
+            errorThrower('unauthorized request', 401)
+        }
+        const url = req.protocol + "://" + req.get('host');
+        const item = new Item(
+            {
+                title: req.body.title,
+                category: req.body.category,
+                type: req.body.type,
+                price: req.body.price,
+                description: req.body.description,
+                imagePath: url + "/public/images/" + req.file.filename,
+                quantity: req.body.quantity,
+                creator: req.userId,
+            }
+        );
+
+
         const savedItem = await item.save();
         res.status(201).json({
             message: 'successfully created item',
             savedItem
         })
     } catch (err) {
-        res.status(400).json({
-            status: 'fail',
-            message: err.message
-        });
+        next(err)
     }
 }
 
