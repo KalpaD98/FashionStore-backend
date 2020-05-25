@@ -11,7 +11,7 @@ const itemSchema = new mongoose.Schema({
         enum: ['Women', 'Men', 'Unisex', 'Kids', 'Sports', 'Babies', 'Other'],
         required: [true, 'An item must have a category']
     },
-    itemType: {
+    type: {
         type: String,
         required: true
     },
@@ -24,11 +24,11 @@ const itemSchema = new mongoose.Schema({
         type: String,
         required: [true, 'An item must have a description']
     },
-    itemPhotos: {
+    photos: {
         type: String,
         default: "default-img.jpg"
     },
-    itemQuantity: {
+    quantity: {
         type: Number,
         required: true,
         default: 0
