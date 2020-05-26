@@ -5,17 +5,16 @@ exports.getAllItems = async (req, res, next) => {
     try {
         const items = await Item.find();
         res.status(200).json({
-            status: 'success',
-            results: items.length,
-            data: {
-                items: items
-            }
+            message: "Success",
+            numberOfItems: items.length,
+            items: items
         });
+
+        if (!items)
+            errorThrower('No Items Found', 404)
+
     } catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: 'No items found'
-        });
+        next(err)
     }
 }
 
@@ -38,10 +37,10 @@ exports.createItem = async (req, res, next) => {
 
         const savedItem = await item.save();
         if (!savedItem) {
-            errorThrower('An Error occurred while saving the item please contact administration',500)
+            errorThrower('An Error occurred while saving the item please contact administration', 500)
         }
         res.status(201).json({
-            message: 'successfully created item',
+            message: 'Success',
             savedItem
         })
     } catch (err) {
@@ -52,18 +51,17 @@ exports.createItem = async (req, res, next) => {
 
 exports.getItem = async (req, res, next) => {
     try {
-        const item = await Item.findById(req.params.id);
+        const fetchedItem = await Item.findById(req.params.id);
         res.status(200).json({
-            status: 'success',
-            data: {
-                item
-            }
+            message: 'success',
+            item: fetchedItem
         })
+
+        if (!fetchedItem) {
+            errorThrower('Item not found', 404)
+        }
     } catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: 'No item found with that id'
-        });
+        next(err)
     }
 }
 
@@ -73,33 +71,28 @@ exports.updateItem = async (req, res, next) => {
         const item = await Item.findByIdAndUpdate(req.params.id, req.body, {
             runValidators: true
         });
-        res.status(201).json({
-            status: 'success',
-            body: {
-                item: item
-            }
+        res.status(200).json({
+            message: 'success',
+            item
+
         })
     } catch (err) {
-        res.status(400).json({
-            status: 'fail',
-            message: err.message
-        });
+        next(err)
     }
 }
 
 exports.deleteItem = async (req, res, next) => {
     try {
         const item = await Item.findByIdAndDelete(req.params.id);
+        if (!item) {
+            errorThrower('Item not found or already been deleted', 404)
+        }
         res.status(204).json({
-            status: 'success',
-            data: {
-                data: null
-            }
+            message: 'success',
+            itemId: item._id
         })
+
     } catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: err.message
-        });
+        next(err)
     }
 }
