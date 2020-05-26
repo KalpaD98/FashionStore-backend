@@ -71,10 +71,20 @@ exports.getItem = async (req, res, next) => {
 
 
 exports.updateItem = async (req, res, next) => {
+
+    let imagePath = req.body.imagePath;
+    if (req.file) {
+        const url = req.protocol + "://" + req.get("host");
+        //set new image
+        imagePath = url + "/images/" + req.file.filename;
+    }
+
     try {
-        const item = await Item.findByIdAndUpdate(req.params.id, req.body, {
+        const item = await Item.findByIdAndUpdate(req.params.id, {...req.body, imagePath}, {
             runValidators: true
         });
+        await deleteImage(item.imagePath, true)
+
         res.status(200).json({
             message: 'success',
             item
@@ -93,8 +103,7 @@ exports.deleteItem = async (req, res, next) => {
         }
 
         const itemId = item._id
-        const imagePath = (item.imagePath).substr(22)
-        await unlinkAsync(imagePath) //delete image
+        await deleteImage(item.imagePath)
 
         res.status(204).json({
             message: 'success',
@@ -104,4 +113,14 @@ exports.deleteItem = async (req, res, next) => {
     } catch (err) {
         next(err)
     }
+}
+
+
+const deleteImage = async (imagePath, isUpdate = false) => {
+
+    if (isUpdate)
+        imagePath = 'public/' + (imagePath).substr(22)
+    else
+        imagePath = (imagePath).substr(22)
+    await unlinkAsync(imagePath) //delete image
 }
