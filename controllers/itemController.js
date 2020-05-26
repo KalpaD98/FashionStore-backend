@@ -1,5 +1,9 @@
 const Item = require('../models/item-model');
 const errorThrower = require('../commons/errorHandlers/throwError');
+const fs = require('fs')
+const {promisify} = require('util')
+
+const unlinkAsync = promisify(fs.unlink)
 
 exports.getAllItems = async (req, res, next) => {
     try {
@@ -87,9 +91,14 @@ exports.deleteItem = async (req, res, next) => {
         if (!item) {
             errorThrower('Item not found or already been deleted', 404)
         }
+
+        const itemId = item._id
+        const imagePath = (item.imagePath).substr(22)
+        await unlinkAsync(imagePath) //delete image
+
         res.status(204).json({
             message: 'success',
-            itemId: item._id
+            itemId
         })
 
     } catch (err) {
