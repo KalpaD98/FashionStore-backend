@@ -14,6 +14,6 @@ router.route('/')
 router.route('/:id')
     .get(itemController.getItem)
     .put(isAuth, isHigherRole, extractFile, itemController.updateItem)
-    .delete(itemController.deleteItem)
+    .delete(isAuth, isHigherRole, itemController.deleteItem)
 
 module.exports = router;
