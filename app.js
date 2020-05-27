@@ -11,7 +11,8 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 //app.use(express.static(path.join(__dirname, 'public')));
-app.use("images", express.static(path.join("public/images")));
+
+app.use('/public/images', express.static(__dirname + '/public/images'));
 
 
 //header setting middleware

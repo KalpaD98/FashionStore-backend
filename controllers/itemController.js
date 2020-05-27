@@ -76,7 +76,7 @@ exports.updateItem = async (req, res, next) => {
     if (req.file) {
         const url = req.protocol + "://" + req.get("host");
         //set new image
-        imagePath = url + "/images/" + req.file.filename;
+        imagePath = url + "/public/images/" + req.file.filename;
     }
 
     try {
