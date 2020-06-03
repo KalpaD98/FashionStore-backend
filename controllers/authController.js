@@ -81,3 +81,11 @@ exports.signup = async (req, res, next) => {
     }
 
 }
+
+exports.postResetEmail = (req,res,next) => {
+
+}
+
+exports.postResetPassword = (req,res,next) => {
+
+}

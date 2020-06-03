@@ -53,4 +53,18 @@ router
     .put(userController.updateUser)
     .delete(userController.deleteUser)
 
+router.post('/reset-password-email',
+    body('email')
+    .trim()
+    .isEmail()
+    .withMessage('Please enter a valid email')
+    .custom((value, {req}) => {
+        return User.findOne({email: value}).then(userDoc => {
+            if (userDoc) {
+                return Promise.reject('Email already exists')
+            }
+        })
+    }).normalizeEmail(),
+    authController.postResetEmail)
+
 module.exports = router;
