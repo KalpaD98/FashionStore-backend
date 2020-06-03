@@ -2,7 +2,20 @@ const User = require('../models/user-model')
 const bcrypt = require('bcrypt')
 const errorHandler = require('../commons/errorHandlers/validationErrorHandler')
 const jwt = require('jsonwebtoken')
-const throwError = require('../commons/errorHandlers/throwError')
+const throwError = require('../commons/errorHandlers/throwError');
+
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
+const sendgridTransport = require('nodemailer-sendgrid-transport');
+
+const transporter = nodemailer.createTransport(
+    sendgridTransport({
+        auth: {
+            api_key:
+                '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'
+        }
+    })
+);
 
 
 exports.login = async (req, res, next) => {
@@ -71,7 +84,7 @@ exports.signup = async (req, res, next) => {
         const createdUser = await user.save()
 
         if (createdUser) {
-            res.status(201).json({message: "user created successfully", user: createdUser})
+            await res.status(201).json({message: "user created successfully", user: createdUser})
         } else {
             throwError('user signup failed', 409);
         }
@@ -82,10 +95,62 @@ exports.signup = async (req, res, next) => {
 
 }
 
-exports.postResetEmail = (req,res,next) => {
+exports.postResetEmail = async (req, res, next) => {
+    const email = req.body.email
+    try {
 
+        const user = User.findOne({email})
+        if (!user) {
+            throwError('No account with that email found', 404)
+        }
+
+        const tokenBuffer = crypto.randomBytes(32);
+        const token = tokenBuffer.toString('hex');
+
+        user.resetToken = token;
+        user.resetTokenExpDate = Date.now() + 3600000
+        await user.save()
+
+
+        await transporter.sendMail({
+            to: email,
+            from: 'kalpafernando1998@gmail.com',
+            subject: 'Password Reset',
+            html: `
+            <p>You have requested a password reset</p>
+            <p>Click this <a href="http://localhost:4200/password-reset/${token}">link</a> to set a new password.</p>
+          `
+        });
+
+        await res.status(200).json({message: 'Password change request approved check your email'})
+
+    } catch (e) {
+        next(e)
+    }
 }
 
-exports.postResetPassword = (req,res,next) => {
+exports.postResetPassword = async (req, res, next) => {
+    const password = req.body.password
+    const resetToken = req.body.resetToken
+
+    try {
+        const user = await User.findOne({resetToken})
+
+
+        if (user) {
+            if (user.resetTokenExpDate < Date.now()) {
+                throwError('reset token has expired resend request', 401)
+            }
+            user.password = bcrypt.hashSync(password, 10)
+            user.resetToken = undefined;
+            user.resetTokenExpDate = undefined
+            await user.save()
+            await res.status(200).json({message: 'password changed successfully'})
+        } else {
+            throwError('user with given reset token not found unauthorized request', 404)
+        }
+    } catch (e) {
+        next(e)
+    }
 
 }
