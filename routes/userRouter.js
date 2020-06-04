@@ -68,4 +68,7 @@ router.post('/reset-password',
         .isLength({min: 6}),
     authController.postResetPassword)
 
+
+router.post('/email-verification', authController.postEmailVerification)
+
 module.exports = router;

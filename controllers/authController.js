@@ -81,21 +81,34 @@ exports.signup = async (req, res, next) => {
             email: email,
             username: username,
             password: hashedPassword,
-            verificationToken: token
+            verificationToken: token,
+            verificationTokenExpDate: Date.now() + 3600000,
         });
 
         const createdUser = await user.save()
 
         if (createdUser) {
+            await transporter.sendMail({
+                to: email,
+                from: 'Email Verification',
+                html: `
+            <p>${createdUser.username} You have successfully sign up for the fashion store</p>
+            <p>Please click <a href="http://localhost:4200/email-verification/${token}">here</a> to verify your email.</p>
+            <p>This link will expire in an hour</p>`
+            });
             await res.status(201).json({message: "user created successfully", user: createdUser})
         } else {
-            throwError('user signup failed', 409);
+            throwError('user sign up failed', 409);
         }
 
     } catch (e) {
         next(e)
     }
 
+}
+
+exports.postEmailVerification = (req, res, next) => {
+    const token = req.body.verificationToken;
 }
 
 exports.postResetPasswordEmail = async (req, res, next) => {
@@ -159,5 +172,6 @@ exports.postResetPassword = async (req, res, next) => {
     } catch (e) {
         next(e)
     }
+
 
 }
