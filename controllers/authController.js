@@ -2,7 +2,20 @@ const User = require('../models/user-model')
 const bcrypt = require('bcrypt')
 const errorHandler = require('../commons/errorHandlers/validationErrorHandler')
 const jwt = require('jsonwebtoken')
-const throwError = require('../commons/errorHandlers/throwError')
+const throwError = require('../commons/errorHandlers/throwError');
+
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
+const sendgridTransport = require('nodemailer-sendgrid-transport');
+
+const transporter = nodemailer.createTransport(
+    sendgridTransport({
+        auth: {
+            api_key:
+            process.env.SENDGRID_KEYgit
+        }
+    })
+);
 
 
 exports.login = async (req, res, next) => {
@@ -71,11 +84,108 @@ exports.signup = async (req, res, next) => {
         const createdUser = await user.save()
 
         if (createdUser) {
-            res.status(201).json({message: "user created successfully", user: createdUser})
+            await res.status(201).json({message: "user created successfully", user: createdUser})
         } else {
             throwError('user signup failed', 409);
         }
 
+    } catch (e) {
+        next(e)
+    }
+
+}
+
+exports.postResetEmail = async (req, res, next) => {
+
+    // const email = req.body.email
+    // crypto.randomBytes(32, (err, buffer) => {
+    //     if (err) {
+    //         throw err
+    //     }
+    //     const token = buffer.toString('hex');
+    //     User.findOne({email})
+    //         .then(user => {
+    //             if (!user) {
+    //                 throwError('user with given email not found', 404)
+    //             }
+    //             user.passwordResetToken = token;
+    //             user.passwordResetTokenExpDate = Date.now() + 3600000;
+    //             return user.save();
+    //         })
+    //         .then(result => {
+    //             transporter.sendMail({
+    //                 to: email,
+    //                 from: 'kalpafernando1998@gmail.com',
+    //                 subject: 'Password Reset',
+    //                 html: `
+    //         <p>${result.username} You have requested a password reset</p>
+    //         <p>Click this <a href="http://localhost:4200/password-reset/${token}">link</a> to set a new password.</p>`
+    //             });
+    //
+    //             res.status(200).json({message: 'Password change request approved check your email'})
+    //         })
+    //         .catch(err => {
+    //             next(err);
+    //         });
+    // });
+
+    //my method
+    const email = req.body.email
+    try {
+        const user = await User.findOne({email})
+
+        if (!user) {
+            throwError('No account with that email found', 404)
+        }
+
+        const tokenBuffer = crypto.randomBytes(32);
+        const token = tokenBuffer.toString('hex');
+        user.passwordResetToken = token;
+        user.passwordResetTokenExpDate = Date.now() + 3600000;
+
+        await user.save();
+
+        await transporter.sendMail({
+            to: email,
+            from: 'kalpafernando1998@gmail.com',
+            subject: 'Password Reset',
+            html: `
+            <p>${user.username} You have requested a password reset</p>
+            <p>Click  <a href="http://localhost:4200/password-reset/${token}">here</a> to set a new password.</p>`
+        });
+
+        await res.status(200).json({message: 'Password change request approved check your email'});
+
+    } catch (e) {
+        next(e)
+    }
+}
+
+exports.postResetPassword = async (req, res, next) => {
+    const password = req.body.password
+    const passwordResetToken = req.body.resetToken
+
+    try {
+        const user = await User.findOne({passwordResetToken})
+
+        if (!user) {
+            throwError('User with given token not found', 404)
+        }
+
+        if (user) {
+            if (user.passwordResetTokenExpDate < Date.now()) {
+                throwError('reset token has expired resend reset request', 401)
+                user.ResetTokenExpDateresetToken = undefined;
+                user.passwordResetTokenExpDate = undefined;
+            }
+            user.password = bcrypt.hashSync(password, 10)
+            user.passwordResetToken = undefined;
+            user.passwordResetTokenExpDate = undefined;
+            await user.save();
+            await res.status(200).json({message: 'password changed successfully'})
+        } else {
+            throwError('user with given reset token not found unauthorized request', 404)
+        }
     } catch (e) {
         next(e)
     }

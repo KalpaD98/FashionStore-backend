@@ -18,10 +18,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['super-admin', 'admin', 'store-manager', 'user'],
         default: 'user'
-    }
+    },
+    verificationToken: {type: String},
+    verified: {type: Boolean, default: false},
+    passwordResetToken: {type: String},
+    passwordResetTokenExpDate: {type: Date}
 })
-
-
 
 
 userSchema.plugin(uniqueValidator)
