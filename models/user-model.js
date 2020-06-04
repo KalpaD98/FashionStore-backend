@@ -19,10 +19,10 @@ const userSchema = new mongoose.Schema({
         enum: ['super-admin', 'admin', 'store-manager', 'user'],
         default: 'user'
     },
-    verificationToken: String,
+    verificationToken: {type: String},
     verified: {type: Boolean, default: false},
-    passwordResetToken: String,
-    passwordResetTokenExpDate: Date
+    passwordResetToken: {type: String},
+    passwordResetTokenExpDate: {type: Date}
 })
 
 

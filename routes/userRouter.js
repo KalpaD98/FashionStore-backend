@@ -58,13 +58,7 @@ router.post('/reset-password-email',
         .trim()
         .isEmail()
         .withMessage('Please enter a valid email')
-        .custom((value, {req}) => {
-            return User.findOne({email: value}).then(userDoc => {
-                if (userDoc) {
-                    return Promise.reject('Email already exists')
-                }
-            })
-        }).normalizeEmail(),
+        .normalizeEmail(),
     authController.postResetEmail)
 
 
