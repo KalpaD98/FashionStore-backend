@@ -20,6 +20,11 @@ const itemSchema = new mongoose.Schema({
         required: [true, 'An item must have a price'],
         default: 0.0
     },
+    size: {
+        type: String,
+        enum: ['XXL','XXL','XL','L','M','S','XS','XXS'],
+        required: [true,'An item must have a Size']
+    },
     description: {
         type: String,
         required: [true, 'An item must have a description']
