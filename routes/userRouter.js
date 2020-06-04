@@ -59,7 +59,7 @@ router.post('/reset-password-email',
         .isEmail()
         .withMessage('Please enter a valid email')
         .normalizeEmail(),
-    authController.postResetEmail)
+    authController.postResetPasswordEmail)
 
 
 router.post('/reset-password',

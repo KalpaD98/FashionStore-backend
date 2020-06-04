@@ -48,7 +48,7 @@ exports.login = async (req, res, next) => {
             {expiresIn: '1h'}
         )
 
-        res.status(200).json({
+        await res.status(200).json({
             token: token,
             expiresIn: '3600',
             userId: user._id,
@@ -70,6 +70,8 @@ exports.signup = async (req, res, next) => {
     const password = req.body.password
     const username = req.body.username // needs to e added on front end
 
+    const token = crypto.randomBytes(32).toString('hex');
+
     try {
         const hashedPassword = await bcrypt.hash(password, 10)
         if (!hashedPassword) {
@@ -78,7 +80,8 @@ exports.signup = async (req, res, next) => {
         const user = new User({
             email: email,
             username: username,
-            password: hashedPassword
+            password: hashedPassword,
+            verificationToken: token
         });
 
         const createdUser = await user.save()
@@ -95,41 +98,8 @@ exports.signup = async (req, res, next) => {
 
 }
 
-exports.postResetEmail = async (req, res, next) => {
-
-    // const email = req.body.email
-    // crypto.randomBytes(32, (err, buffer) => {
-    //     if (err) {
-    //         throw err
-    //     }
-    //     const token = buffer.toString('hex');
-    //     User.findOne({email})
-    //         .then(user => {
-    //             if (!user) {
-    //                 throwError('user with given email not found', 404)
-    //             }
-    //             user.passwordResetToken = token;
-    //             user.passwordResetTokenExpDate = Date.now() + 3600000;
-    //             return user.save();
-    //         })
-    //         .then(result => {
-    //             transporter.sendMail({
-    //                 to: email,
-    //                 from: 'kalpafernando1998@gmail.com',
-    //                 subject: 'Password Reset',
-    //                 html: `
-    //         <p>${result.username} You have requested a password reset</p>
-    //         <p>Click this <a href="http://localhost:4200/password-reset/${token}">link</a> to set a new password.</p>`
-    //             });
-    //
-    //             res.status(200).json({message: 'Password change request approved check your email'})
-    //         })
-    //         .catch(err => {
-    //             next(err);
-    //         });
-    // });
-
-    //my method
+exports.postResetPasswordEmail = async (req, res, next) => {
+    errorHandler(req)
     const email = req.body.email
     try {
         const user = await User.findOne({email})
