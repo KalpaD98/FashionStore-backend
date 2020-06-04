@@ -70,5 +70,6 @@ router.post('/reset-password',
 
 
 router.post('/email-verification', authController.postEmailVerification)
+router.post('/resend-email-verification', authController.postEmailVerification)
 
 module.exports = router;
