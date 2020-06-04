@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema({
         default: 'user'
     },
     verificationToken: {type: String},
+    verificationTokenExpDate: {type: Date},
     verified: {type: Boolean, default: false},
     passwordResetToken: {type: String},
     passwordResetTokenExpDate: {type: Date}
